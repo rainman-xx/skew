@@ -9,7 +9,7 @@ from pkg_resources import resource_filename
 
 aws_service = namedtuple("aws_service","name service_code skew_resource filters columns")
 
-aws_services = [
+services = [
             aws_service('ec2','AmazonEC2','reserved',{'State': 'active'},['InstanceType','InstanceCount','Duration','FixedPrice','ProductDescription','Start']),
             aws_service('rds','AmazonRDS','reserved',{'State': 'active'},['DBInstanceClass','DBInstanceCount','Duration','FixedPrice','ReservedDBInstanceId','StartTime','MultiAZ']),
             aws_service('elasticache','AmazonElastiCache','reserved',{'State': 'active'},['CacheNodeType','CacheNodeCount','Duration','FixedPrice','ReservedCacheNodeId','StartTime']),
@@ -92,10 +92,10 @@ if __name__ == '__main__':
                 if not include:
                     continue # Skip to the next loop (instance)
 
-                od_price,ri_price = get_price(get_region_name(region), aws_service.service_code, data[aws_service.columns[0]], 'Linux')
+                od_price,ri_price = get_price(get_region_name(region), aws_service.service_code, data[service.columns[0]], 'Linux')
 
-                print('{},{}'.format(region,aws_service.name),end='')
+                print('{},{}'.format(region,service.name),end='')
                 print('{},{}'.format(od_price,ri_price),end='')
-                for col in aws_service.columns:
+                for col in service.columns:
                     print(',{}'.format(data[col]),end='')
                 print('')
